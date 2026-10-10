@@ -32,3 +32,5 @@ Uploaded archives were inspected locally. Convertible SketchUp samples have diff
 ## Landscape assets
 
 Poly Haven CC0 assets: [Tree Small 02](https://polyhaven.com/a/tree_small_02) by Rico Cilliers and [Leafy Grass](https://polyhaven.com/a/leafy_grass). Tree geometry simplified for the web while preserving UVs; leaf alpha mask restored, textures packed into WebP. [License](https://polyhaven.com/license). The scene has no people or crane.
+
+3D-модели: PBR-дерево [Synthetic Wood](https://polyhaven.com/a/synthetic_wood), Poly Haven, CC0. Модели дополнены водостоками, оконной фурнитурой, фактурной облицовкой и меблированными помещениями. Кнопка «Интерьер» включает разрез с автоматическим скрытием ближайших стен при вращении.
