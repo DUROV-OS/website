@@ -15,6 +15,8 @@ for(const x of [-W/2+.1,W/2-.1])box(stages[1],.18,.23,D,x,Y-.12,0,mats.lightWood
 // Structural wall studs and roof trusses.
 for(const x of [-W/2+.08,W/2-.08]){for(let z=front;z<=back;z+=.6)box(stages[2],.09,H,.14,x,Y+H/2,z,mats.lightWood);for(const y of [Y+.06,Y+H-.04])box(stages[2],.14,.12,back-front,x,y,(back+front)/2,mats.lightWood)}
 for(let x=-W/2+.05;x<W/2;x+=.6)box(stages[2],.09,H,.14,x,Y+H/2,back,mats.lightWood);
+// Terrace eaves continue the wall top plates and bear on corner posts.
+if(!mini){for(const x of [-W/2+.08,W/2-.08]){box(stages[2],.14,.12,P+.12,x,Y+H-.04,-D/2+P/2-.02,mats.lightWood);box(stages[2],.14,H,.14,x,Y+H/2,-D/2+.08,mats.lightWood);}box(stages[2],W,.14,.14,0,Y+H-.04,-D/2+.08,mats.lightWood);}
 for(let z=-D/2;z<=D/2+.01;z+=D/8){beam(stages[2],[-W/2,Y+H,z],[0,Y+H+R,z],.12);beam(stages[2],[0,Y+H+R,z],[W/2,Y+H,z],.12);beam(stages[2],[-W/2,Y+H,z],[W/2,Y+H,z],.10)}
 // Engineering networks, deliberately visible before insulation and cladding.
 for(const x of [-W/2+.2,W/2-.2]){beam(stages[3],[x,Y+.4,front],[x,Y+.4,back-.2],.04,mats.wire);for(let z=front+.7;z<back;z+=2)beam(stages[3],[x,Y+.4,z],[x,Y+2,z],.025,mats.wire)}beam(stages[3],[-W/2+.35,Y+.15,front+.7],[-W/2+.35,Y+.15,back-.4],.065,mats.pipe);
