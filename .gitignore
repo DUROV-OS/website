@@ -1,0 +1,6 @@
+.DS_Store
+research/
+qa/
+.openai/
+*.tar.gz
+*.zip
