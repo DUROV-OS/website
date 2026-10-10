@@ -174,6 +174,20 @@ for(const x of mini?[0]:[-W/2+1.15,W/2-1.15]){for(let j=0;j<9;j++){const fold=so
 for(const side of [-1,1]){const art=new THREE.Group();art.position.set(side*(W/2-.11),Y+1.6,roomLine-.9);art.rotation.y=side*Math.PI/2;interior.add(art);box(art,.46,.62,.025,0,0,0,mats.wood);box(art,.40,.56,.008,0,0,-.020,ceramic);const disk=new THREE.Mesh(new THREE.CircleGeometry(.11,24),sageFabric);disk.position.set(-.04,.05,-.027);disk.rotation.y=Math.PI;art.add(disk);box(art,.24,.065,.005,.03,-.13,-.027,stoneTop);}
 for(let j=0;j<3;j++){box(kitchen,.06,.10+j*.025,.07,-kitchenW*.16+j*.09,.935+j*.012,.14,ceramic);}box(kitchen,.20,.015,.14,kitchenW*.30,.87,.15,mats.wood);cylinder(kitchen,.045,.12,kitchenW*.30,.94,.15,stoneTop);
 
+// Close-up interior finish: tiled splashback, cabinet joints and everyday objects.
+const tileMat=new THREE.MeshStandardMaterial({color:0xd9ddd5,roughness:.38});
+box(kitchen,kitchenW,.49,.035,0,1.15,.35,mats.wood);
+for(let col=0;col<10;col++)for(let row=0;row<3;row++)box(kitchen,kitchenW/10-.006,.15-.006,.018,-kitchenW/2+(col+.5)*kitchenW/10,1.00+row*.15,.325,tileMat);
+for(let i=0;i<4;i++){const x=-kitchenW/2+unit*(i+.5);box(kitchen,unit-.055,.012,.012,x,.76,-.338,stoneTop);box(kitchen,unit-.055,.012,.012,x,.12,-.338,stoneTop);}
+const kettle=new THREE.Group();kettle.position.set(kitchenW*.31,.895,-.02);kitchen.add(kettle);softBox(kettle,.15,.19,.14,0,.095,0,brushedSteel);cylinder(kettle,.061,.014,0,.196,0,mats.dark);tube(kettle,[.06,.14,0],[.11,.18,0],.021,brushedSteel);tube(kettle,[-.08,.04,0],[-.105,.15,0],.011,mats.dark);tube(kettle,[-.105,.15,0],[-.06,.18,0],.011,mats.dark);
+for(const x of [-.23,.23]){cylinder(interior,.11,.012,tableX+x,Y+.458,tableZ-.08,ceramic);tube(interior,[tableX+x+.13,Y+.469,tableZ-.16],[tableX+x+.13,Y+.469,tableZ+.01],.004,brushedSteel);}
+for(const side of [-1,1]){const cushion=softBox(interior,.29,.30,.12,sofaX+side*.45,Y+.66,sofaZ+.18,side<0?fabric:sageFabric);cushion.rotation.z=side*.18;cushion.rotation.x=-.12;}
+// A slim wall bookshelf, with separate volumes and a ceramic vase.
+const shelf=new THREE.Group();shelf.position.set(W/2-.20,Y+.08,front+.65);shelf.rotation.y=-Math.PI/2;interior.add(shelf);
+for(const y of [.35,.76,1.17])box(shelf,.85,.045,.22,0,y,0,mats.wood);for(const x of [-.39,.39])tube(shelf,[x,.10,.08],[x,1.28,.08],.012,mats.dark);
+for(let i=0;i<8;i++){const h=.16+(i%3)*.035;const book=box(shelf,.035,h,.14,-.30+i*.052,.78+h/2,.02,i%2?sageFabric:ceramic);book.rotation.z=i===7?-.16:0;box(shelf,.021,.013,.003,-.30+i*.052,.82,-.052,mats.wood);}
+cylinder(shelf,.075,.18,.19,1.28,0,ceramic);tube(shelf,[.19,1.36,0],[.13,1.66,.03],.004,mats.green);tube(shelf,[.19,1.36,0],[.25,1.60,-.02],.004,mats.green);
+for(const side of [-1,1]){box(interior,.028,.075,back-front-.10,side*(W/2-.105),Y+.10,(front+back)/2,ceramic);}
 const raw=stages[0].children.slice(),timber=new THREE.Group(),bath=new THREE.Group();for(let j=0;j<raw.length;j++)(j<11?timber:bath).add(raw[j]);bath.position.x=-W-1;stages[0].add(timber,bath);root.userData={stages,W,D,H,mini,doors,front,back,Y};return root}
 const ease=t=>{t=clamp(t);return t*t*(3-2*t)};
 function workshop(house,onReady){
@@ -226,7 +240,7 @@ if(construction&&finalProgress>0){
  entryPosition.set(entranceX,eyeY,entranceZ-10.5+enter*11.65);
  entryTarget.set(entranceX,eyeY-.08,entranceZ+2.8);
  camera.position.lerp(entryPosition,align);cameraTarget.lerp(entryTarget,align);
- camera.fov=39+enter*23;interiorLight.visible=enter>0;
+ camera.fov=39+enter*43;interiorLight.visible=enter>0;
 }else{camera.fov=construction?39:34;interiorLight.visible=false;}
 camera.updateProjectionMatrix();camera.lookAt(cameraTarget);renderer.render(scene,camera);dirty=false}raf=requestAnimationFrame(tick)}resize();setStage(construction?0:9.999);tick();
 return{setStage,setZoom(delta){viewZoom=clamp(viewZoom+delta,1,1.65);dirty=true},setInterior(on){interiorMode=on;elev=on?.66:.32;dirty=true},setEmphasis(position){displayPosition=position;dirty=true},setModel(next){scene.remove(house);disposeResources(house);house=buildHouse(next,()=>{dirty=true});scene.add(house);theta=next==='barn_dh27'?1.05:.72;elev=.32;setStage(9.999);dirty=true},reset(){theta=.72;elev=.32;dirty=true},destroy(){disposed=true;if(site)site.group.userData.disposed=true;cancelAnimationFrame(raf);ro.disconnect();io.disconnect();disposeResources(scene);sun.shadow.map?.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove()}}}
