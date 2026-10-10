@@ -27,6 +27,8 @@ jobs:
         run: |
           node --check dist/app.js
           node --check dist/house3d.js
+          node --check dist/quiz.js
+          node --test tests/quiz.test.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload website

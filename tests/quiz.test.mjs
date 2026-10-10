@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {readFile} from 'node:fs/promises';
+const source=await readFile(new URL('../dist/quiz.js',import.meta.url),'utf8');
+const {recommend,bedroomCount,questions}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const models=JSON.parse(await readFile(new URL('../dist/data.json',import.meta.url),'utf8'));
+test('A modest rental barn stays within budget and requested area',()=>{const result=recommend(models,{purpose:'rent',size:'small',rooms:'0',style:'barn',budget:'3000000'});assert.equal(result[0].exact,true);assert.ok(result[0].model.price<=3000000);assert.ok(result[0].model.area<40);assert.ok(result[0].model.id.startsWith('barn'));});
+test('Two-bedroom family choices use published room descriptions, not floor area',()=>{assert.equal(bedroomCount(models.find(m=>m.id==='flat_dh67')),1);assert.equal(bedroomCount(models.find(m=>m.id==='house_dh64')),2);const result=recommend(models,{size:'medium',rooms:'2',style:'barn',budget:'5000000'});assert.equal(result[0].model.id,'house_dh64');assert.equal(result[0].exact,true);});
+test('Impossible requirements are explicitly identified as nearest matches',()=>{const result=recommend(models,{size:'large',rooms:'2',style:'flat',budget:'3000000'});assert.equal(result.length,3);assert.ok(result.every(r=>!r.exact));assert.equal(new Set(result.map(r=>r.model.id)).size,3);});
+test('Unrestricted answers give three valid catalog projects and every step has unique choices',()=>{assert.equal(recommend(models,{size:'any',rooms:'any',style:'any',budget:'any'}).length,3);for(const q of questions)assert.equal(new Set(q.options.map(o=>o[0])).size,q.options.length);});
